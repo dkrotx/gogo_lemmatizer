@@ -1,0 +1,14 @@
+# lemmatizer pkg-config file (rsh mode)
+
+lemroot=/usr/local/lemmatizer
+srcroot=${lemroot}/Source
+
+Name: Lemmatizer
+Description: Morphology operator by AOT
+URL: http://www.aot.ru
+Version: 0.9
+Requires:
+Conflicts:
+Cflags: -I${lemroot} -I${srcroot} -I${srcroot}/Interfaces/cpp -I${srcroot}/Interfaces/c
+Libs: -L${lemroot}/Bin -lclemmatiserrsh -lSimpleLemmatiserrsh -lAgramtabrsh -lLemmatizerrsh -lGraphanrsh -lMorphWizardrsh -lStructDictrsh
+

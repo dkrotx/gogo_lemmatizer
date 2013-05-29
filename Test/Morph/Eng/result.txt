@@ -1,0 +1,9 @@
+Loading..
+Input a word..
+>>NOUN:MOTHER MOTHERS 
+VERB:MOTHER MOTHERS MOTHERED MOTHERED MOTHERING 
+
++ MOTHER NOUN narr,sg,;
++ MOTHER VERB inf,;
+
+>

@@ -1,0 +1,14 @@
+# lemmatizer pkg-config file (dst mode)
+
+lemroot=@RMLROOT@
+srcroot=${lemroot}/Source
+
+Name: Lemmatizer
+Description: Morphology operator by AOT
+URL: http://www.aot.ru
+Version: 0.9
+Requires:
+Conflicts:
+Cflags: -I${lemroot} -I${srcroot} -I${srcroot}/Interfaces/cpp -I${srcroot}/Interfaces/c
+Libs: -L${lemroot}/Bin -lclemmatiserdst -lSimpleLemmatiserdst -lAgramtabdst -lLemmatizerdst -lGraphandst -lMorphWizarddst -lStructDictdst
+

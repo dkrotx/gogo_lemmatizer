@@ -1,0 +1,7 @@
+Loading..
+Input a word..
+>>SUB:MUTTER MUTTER MUTTER MUTTER MÜTTER MÜTTER MÜTTERN MÜTTER 
+
++ MUTTER SUB nom,sin,fem,;gen,sin,fem,;dat,sin,fem,;akk,sin,fem,;
+
+>

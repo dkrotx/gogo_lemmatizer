@@ -1,0 +1,6 @@
+                                                              -1 0 BEG DOC
+Мама                                                          0 4 RLE Aa NAM? SENT1
+мыла                                                          5 4 RLE aa
+раму                                                          10 4 RLE aa
+.                                                             14 1 PUN CS? SENT2
+«                                                             15 1 DEL EOLN

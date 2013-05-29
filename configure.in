@@ -1,0 +1,28 @@
+AC_PREREQ(2.53)
+AC_INIT()
+
+# Checks for programs.
+AC_PROG_CXX
+
+PREFIX=$prefix
+test "x${PREFIX}" = xNONE && PREFIX=${ac_default_prefix}
+
+RMLROOT="$PREFIX/lemmatizer"
+AC_SUBST(RMLROOT)
+
+COMPAT_DIR="/usr/lemmatizer"
+AC_SUBST(COMPAT_DIR)
+
+AC_OUTPUT( Makefile \
+           Source/common/common_exe_mak \
+           Source/common/common_lib_mak \
+           pkgconfig/lemmatizer-rsh.pc \
+           pkgconfig/lemmatizer-rst.pc \
+           pkgconfig/lemmatizer-dsh.pc \
+           pkgconfig/lemmatizer-dst.pc \
+           pkgconfig/lemmatizer.pc \
+         )
+
+AC_MSG_NOTICE([ ])
+AC_MSG_NOTICE([ "Lemmatizer will be installed to : ${RMLROOT}" ])
+

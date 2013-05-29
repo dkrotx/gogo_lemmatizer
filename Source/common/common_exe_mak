@@ -1,0 +1,49 @@
+#########################################
+######## common part  ###################
+#########################################
+
+SYSTEMCXX=@ac_systemcxx@
+
+ifeq "$(SYSTEMCXX)" "no"
+GCC_VERSION ?= 42
+CXX=g++${GCC_VERSION}
+endif
+
+
+#lib_pathes := $(subst ..,-L..,$(subst %lib, -l,$(libs)))
+lib_pathes := $(subst ../..,doubleUP,$(subst lib, -l,$(libs)))
+lib_pathes := $(subst ..,-L..,$(lib_pathes))
+lib_pathes := $(subst doubleUP,-L../..,$(lib_pathes))
+
+
+
+# we have to use "--start-group --end-group" in order to solve cross-references
+
+libs_argument := -Wl,--start-group $(subst .$(lib_ext),,$(lib_pathes)) -Wl,--end-group
+
+ifeq ($(libmode), static)
+	lib_mode_switch := -static
+endif
+
+$(ExeName) : $(objects) $(libs)
+	$(mode_error)
+	$(CXX)  $(lib_mode_switch) $(lparams) $(objects) $(libs_argument) $(stllib)  -o $(ExeName)
+	cp $(ExeName) $(RML)/Bin/
+
+$(libs): %$(ct).$(lib_ext) : FORCE
+	$(mode_error)
+	$(MAKE) -C $(dir $@) mode=$(mode) libmode=$(libmode)
+
+$(objects): %.o$(ct) : %.cpp
+	$(mode_error)
+	$(CXX) $(cparams) $< -o $@
+
+
+FORCE:
+
+include $(wildcard *.d)
+
+clean: ;
+	-rm -f $(ExeName) $(objects) *.d
+	-for catal in $(dir $(libs)); do  $(MAKE) -C  $$catal mode=$(mode) clean; done
+

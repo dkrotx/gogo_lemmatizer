@@ -1,0 +1,64 @@
+# in order to compile with stlport, set stlport to 1
+stlport := 0
+
+ifeq ($(stlport), 1)
+	cparams := -I../stl/stlport 
+	stllib :=  -L./lib/ -lstlport_gcc
+endif
+
+ifndef libmode
+	libmode := shared 
+endif
+
+ifeq ($(mode), debug)
+	cparams := $(cparams) -MD -c -O0 -g $(common_parms)
+	ct := d
+else
+	ifeq ($(mode), debug_thread)
+		cparams := $(cparams) -MD -c -O0 -g $(common_parms)
+		lparams :=
+		ct := td
+	else
+		ifeq ($(mode), release_thread)
+			cparams := $(cparams) -MD -c -O3 -funroll-loops $(common_parms)
+			ct := t
+			lparams := 
+		else
+			ct := r
+			ifeq ($(mode), profile)
+				cparams := $(cparams) -fprofile-arcs  -pg -g -MD -c -O3 -funroll-loops $(common_parms)
+				lparams := -pg
+			else
+				ifeq ($(mode), release)
+					cparams := $(cparams) -MD -c -O3 -funroll-loops $(common_parms)
+				else
+					mode_error =  $(error unknown mode. It can be debug, release, profile, debug_thread, release_thread)	
+				endif	
+			endif
+		endif
+	endif
+endif
+
+#
+#ifneq ($(ct), r)
+#	ifneq ($(ct), rs)
+#		ExeExten = $(ct)
+#	endif
+#endif
+
+
+ifeq ($(libmode), static)
+	ct := $(ct)st
+	lib_ext := a
+	cparams := $(cparams) -fPIC
+	LDFLAGS := -O3 -nostdlib 
+	ifneq ($(stlport), 1)
+		LDPATH :=
+		LDLIBS := /usr/lib/crt1.o /usr/lib/crti.o /usr/local/lib/gcc-lib/i686-pc-linux-gnu/3.2.2/crtbegin.o -L/usr/local/gcc3.2/lib/gcc-lib/i686-pc-linux-gnu/3.2 -L/usr/local/lib/gcc-lib/i686-pc-linux-gnu/3.2.2/../../.. -Wl,-Bstatic -lstdc++ -Wl,-Bdynamic -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/local/lib/gcc-lib/i686-pc-linux-gnu/3.2.2/crtend.o /usr/lib/crtn.o
+	endif
+else
+	ct := $(ct)sh
+	lib_ext := so
+	cparams := $(cparams) -fPIC
+endif
+
