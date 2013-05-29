@@ -27,6 +27,15 @@ missing
 stamp-h1
 *.tar.gz
 
+# executables
+Bin/MorphGen
+Bin/RegressionTest
+Source/MorphGen/MorphGen
+Source/RegressionTest/RegressionTest
+
+Dicts/Morph/*/
+
+
 
 # Compiled Static libraries
 *.lai
