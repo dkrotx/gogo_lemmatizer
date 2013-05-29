@@ -5,11 +5,10 @@
 # GNU Autoconf and Automake
 INSTALL
 depcomp
-Makefile.in
 ltmain.sh
 libtool
+/Makefile
 *.scan
-Makefile
 aclocal.m4
 autom4te.cache
 config.h

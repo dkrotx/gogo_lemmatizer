@@ -1,0 +1,106 @@
+# Lemmatizer makefile:
+#   - build libs and executables
+#   - generate binary dicts
+#   - simple regression test
+#   - install with conjunction in ldconfig
+#
+# Kisel Jan, kisel@corp.mail.ru
+#
+
+RML=`pwd`
+RMLROOT=@RMLROOT@
+ENVCMD=env RML=$(RML) LD_LIBRARY_PATH=$(RML)/Bin:$(LD_LIBRARY_PATH)
+CPPHDR_FIND_MASK=-type f -a \( -name '*.hpp' -o -name '*.hxx' -o -name '*.h' \)
+SOURCES=Source/MorphGen Source/Interfaces/cpp Source/Interfaces/c Source/RegressionTest
+PKGCONFIG_DIRS=/usr/local/lib/pkgconfig /usr/lib/pkgconfig /usr/libdata/pkgconfig /usr/local/libdata/pkgconfig
+COMPAT_DIR=@COMPAT_DIR@
+
+# special meaning of _STATIC env for lemmatizer install
+SKIPBINS=
+ifeq "$(_STATIC)" "1"
+SKIPBINS:=yes
+endif
+
+all: src.all dicts test
+	@echo Ready to install
+
+# last target should give a fastest variant since it will be used 
+# for dictionary building
+src.all:
+	@for lib in shared static; do                              \
+		echo "=============================================="; \
+		echo BUILD LIBRARIES: $$lib;                 \
+		echo "=============================================="; \
+		$(MAKE) $(MAKE_FLAGS) RML=$(RML) mode=release libmode=$$lib src; \
+	done
+	@cd Bin;\
+	 unlink libclemmatiser.a  >/dev/null 2>&1;   \
+	 ln -s  libclemmatiserrst.a libclemmatiser.a; \
+	 unlink libclemmatiser.so >/dev/null 2>&1;   \
+	 ln -s libclemmatiserrsh.so libclemmatiser.so
+
+src:
+	for d in ${SOURCES}; do ${MAKE} -C $$d $(MAKE_FLAGS); done
+
+dicts: do_dictc_dir Dicts/SrcMorph/Rus.mwz Dicts/SrcMorph/Eng.mwz
+	$(ENVCMD) Source/MorphGen/MorphGen Dicts/SrcMorph/Eng.mwz Dicts/Morph/Eng 5 3
+	$(ENVCMD) Source/MorphGen/MorphGen Dicts/SrcMorph/Rus.mwz Dicts/Morph/Rus 5 3
+
+do_dictc_dir:
+	for d in Eng Rus; do \
+		mkdir -p Dicts/Morph/$$d 2>&1 >/dev/null || true; \
+	done
+
+test:
+	$(ENVCMD) Source/RegressionTest/RegressionTest | diff -q -B -w Test/RegressionTest.out -
+	@echo "Test(s) passed, lemmatizer seems to be OK"
+
+dictclean: clean
+	rm -rf Dicts/Morph/Rus Dicts/Morph/Eng
+
+clean:
+	@for lib in shared static; do                              \
+		for t in ${SOURCES}; do \
+			$(MAKE) -C $$t $(MAKE_FLAGS) RML=$(RML) mode=release libmode=$$lib clean; \
+		done; \
+	done
+	@find Bin/ -type f \! -name '.exists' -delete 
+	@find Bin/ -type l -delete
+
+install:
+	@echo installing to ${RMLROOT}...
+	@test `id -u` -eq 0 && echo "installing as system-wide" || echo "installing as local"
+	@mkdir -p ${RMLROOT} >/dev/null 2>&1 || true
+	@$(RM) -rf ${RMLROOT}/Bin ${RMLROOT}/lib && if [ -z ${SKIPBINS} ]; then cp -R Bin ${RMLROOT}; (cd ${RMLROOT}; ln -s  Bin  lib); fi
+	@$(RM) -rf ${RMLROOT}/Dicts && mkdir ${RMLROOT}/Dicts && cp -R Dicts/Morph ${RMLROOT}/Dicts
+	@echo copying header files...
+	@$(RM) -rf ${RMLROOT}/Source ${RMLROOT}/include
+	@(find . -type f -and \( -name '*.h' -o -name '*.hpp' \) | tar -T - -cf -  ) | (tar -C ${RMLROOT} -xf -)
+	@(cd ${RMLROOT}; ln -s Source include)
+	@cp rml.ini ${RMLROOT}/
+	@if [ `id -u` -eq 0 ]; then          \
+		echo installing pkgconfigs;        \
+		for d in ${PKGCONFIG_DIRS}; do     \
+			if [ -d $$d ]; then                     \
+				install pkgconfig/*.pc $$d || exit 1; \
+				break;                                \
+			fi;                                     \
+		done;                             \
+		echo trying to register library;  \
+		if [ -d /etc/ld.so.conf.d ]; then \
+			echo ${RMLROOT}/Bin >/etc/ld.so.conf.d/lemmatizer.conf && ldconfig; \
+		elif [ -e /etc/ld.so.conf ]; then  \
+			echo ${RMLROOT}/Bin >>/etc/ld.so.conf && ldconfig; \
+		else \
+			echo ld.so.conf not found, please add library path ${RMLROOT}/Bin manually; \
+		fi;  \
+		if [ ! ${COMPAT_DIR} -ef ${RMLROOT} ]; then \
+			rm -rf ${COMPAT_DIR}; ln -s ${RMLROOT} ${COMPAT_DIR} && echo "!!! ${COMPAT_DIR} created for compatibility"; \
+		fi; \
+	fi
+	@echo
+	@echo SUCCESSFULLY installed to ${RMLROOT}
+
+distclean: clean dictclean
+	-rm -f Makefile pkgconfig/*.pc
+
