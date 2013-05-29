@@ -13,7 +13,7 @@ ifeq ($(libmode), shared)
 
 $(LibName).$(lib_ext) : $(objects)
 	$(mode_error)
-	$(CXX) -$(libmode) -o $@ $^
+	$(CXX) -$(libmode) -o $@ $^ @PCRE_LIBS@
 	cp $@ $(RML)/Bin/
 
 else

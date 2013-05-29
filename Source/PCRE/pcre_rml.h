@@ -1,7 +1,7 @@
 #ifndef _PCRE_RML_H
 #define _PCRE_RML_H
 
-#include "pcre.h"
+#include <pcre.h>
 
 inline pcre* compile_prce (const char* pattern)
 {

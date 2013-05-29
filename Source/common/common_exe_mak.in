@@ -27,7 +27,7 @@ endif
 
 $(ExeName) : $(objects) $(libs)
 	$(mode_error)
-	$(CXX)  $(lib_mode_switch) $(lparams) $(objects) $(libs_argument) $(stllib)  -o $(ExeName)
+	$(CXX)  $(lib_mode_switch) $(lparams) $(objects) $(libs_argument) $(stllib) @PCRE_LIBS@ -o $(ExeName)
 	cp $(ExeName) $(RML)/Bin/
 
 $(libs): %$(ct).$(lib_ext) : FORCE

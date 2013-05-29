@@ -17,6 +17,7 @@ config.guess
 config.sub
 config.log
 install-sh
+autoscan.log
 config.status
 /config/*
 configure
@@ -43,7 +44,6 @@ Dicts/Morph/*/
 *.orst
 *.orsh
 *.d
-*.out
 
 # Compiled Dynamic libraries
 *.so
@@ -52,3 +52,12 @@ Dicts/Morph/*/
 # vim
 *.swp
 *.bak
+
+# build from .in-files
+Source/common/common_exe_mak
+Source/common/common_lib_mak
+pkgconfig/lemmatizer-rsh.pc
+pkgconfig/lemmatizer-rst.pc
+pkgconfig/lemmatizer-dsh.pc
+pkgconfig/lemmatizer-dst.pc
+pkgconfig/lemmatizer.pc
