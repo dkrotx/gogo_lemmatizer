@@ -1,0 +1,19 @@
+Lemmatizer from AOT group (http://lemmatizer.org/) with *just* autotools added.
+
+
+INSTALLATION:
+=============
+# unless you have ./configure (git?) launch `autoconf' first
+$ autoconf 
+
+$ make
+$ sudo make install
+
+lemmatizer will be installed to /usr/local/lemmatizer with aditional symlink to /usr/lemmatizer
+
+DOCUMENTATION:
+==============
+Here are links to the installation notes:
+1. Morphology: Docs/Morph_UNIX.txt
+2. Syntax: Docs/Syntax_UNIX.txt
+3. Concordance: Docs/DDC_UNIX.txt
