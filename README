@@ -6,6 +6,7 @@ INSTALLATION:
 # unless you have ./configure (git?) launch `autoconf' first
 $ autoconf 
 
+$ ./configure
 $ make
 $ sudo make install
 
