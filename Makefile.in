@@ -12,7 +12,6 @@ RMLROOT=@RMLROOT@
 ENVCMD=env RML=$(RML) LD_LIBRARY_PATH=$(RML)/Bin:$(LD_LIBRARY_PATH)
 CPPHDR_FIND_MASK=-type f -a \( -name '*.hpp' -o -name '*.hxx' -o -name '*.h' \)
 SOURCES=Source/MorphGen Source/Interfaces/cpp Source/Interfaces/c Source/RegressionTest
-PKGCONFIG_DIRS=/usr/local/lib/pkgconfig /usr/lib/pkgconfig /usr/libdata/pkgconfig /usr/local/libdata/pkgconfig
 COMPAT_DIR=@COMPAT_DIR@
 
 # special meaning of _STATIC env for lemmatizer install
@@ -78,19 +77,15 @@ install:
 	@(find . -type f -and \( -name '*.h' -o -name '*.hpp' \) | tar -T - -cf -  ) | (tar -C ${RMLROOT} -xf -)
 	@(cd ${RMLROOT}; ln -s Source include)
 	@cp rml.ini ${RMLROOT}/
-	@if [ `id -u` -eq 0 ]; then          \
-		echo installing pkgconfigs;        \
-		for d in ${PKGCONFIG_DIRS}; do     \
-			if [ -d $$d ]; then                     \
-				install pkgconfig/*.pc $$d || exit 1; \
-				break;                                \
-			fi;                                     \
-		done;                             \
+	@if [ `id -u` -eq 0 ]; then                \
+        PKGCONFDIR=`pkg-config --debug 2>&1 | sed -ne "/Scanning directory /{s///;s/'//gp;q;}"`; \
+		echo installing pkgconfigs to $$PKGCONFDIR;        \
+		install -v pkgconfig/*.pc $$PKGCONFDIR/ || exit 1; \
 		echo trying to register library;  \
 		if [ -d /etc/ld.so.conf.d ]; then \
-			echo ${RMLROOT}/Bin >/etc/ld.so.conf.d/lemmatizer.conf && ldconfig; \
+			echo ${RMLROOT}/Bin >/etc/ld.so.conf.d/lemmatizer.conf && /sbin/ldconfig; \
 		elif [ -e /etc/ld.so.conf ]; then  \
-			echo ${RMLROOT}/Bin >>/etc/ld.so.conf && ldconfig; \
+			echo ${RMLROOT}/Bin >>/etc/ld.so.conf && /sbin/ldconfig; \
 		else \
 			echo ld.so.conf not found, please add library path ${RMLROOT}/Bin manually; \
 		fi;  \
