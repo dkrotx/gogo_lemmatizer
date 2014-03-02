@@ -142,10 +142,10 @@ bool  CMorphDictBuilder::GeneratePrefixes(const MorphoWizard& Wizard)
 		for (set<string>::const_iterator it =  Wizard.m_PrefixSets[i].begin();  it != Wizard.m_PrefixSets[i].end(); it++)
 		{
 			string prefix = *it;
-			StringVector::iterator it = find(m_Prefixes.begin(), m_Prefixes.end(), prefix);
-			if (it == m_Prefixes.end())
-				it = m_Prefixes.insert(m_Prefixes.end(), prefix);
-			m_PrefixSets.back().push_back(it - m_Prefixes.begin());
+			StringVector::iterator svit = find(m_Prefixes.begin(), m_Prefixes.end(), prefix);
+			if (svit == m_Prefixes.end())
+				svit = m_Prefixes.insert(m_Prefixes.end(), prefix);
+			m_PrefixSets.back().push_back(svit - m_Prefixes.begin());
 		};
 		if (m_PrefixSets.back().empty())
 		{
