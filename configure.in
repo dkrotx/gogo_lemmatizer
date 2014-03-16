@@ -17,6 +17,7 @@ AC_CHECK_FUNCS([strchr])
 AC_CHECK_FUNCS([strcspn])
 AC_CHECK_FUNCS([strspn])
 AC_CHECK_FUNCS([strstr])
+AC_CHECK_FUNCS([iconv_open])
 AC_CHECK_HEADERS([fcntl.h])
 AC_CHECK_HEADERS([limits.h])
 AC_CHECK_HEADERS([locale.h])
@@ -25,6 +26,7 @@ AC_CHECK_HEADERS([string.h])
 AC_CHECK_HEADERS([sys/time.h])
 AC_CHECK_HEADERS([sys/timeb.h])
 AC_CHECK_HEADERS([unistd.h])
+AC_CHECK_HEADERS([iconv.h])
 
 
 PREFIX=$prefix

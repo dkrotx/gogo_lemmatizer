@@ -3,7 +3,9 @@ LibName=libSimpleLemmatiser$(ct)
 
 objects=SimpleLemmatiser.o$(ct) \
         CMorphology.o$(ct)      \
-        converts.o$(ct)
+        LemInterface.o$(ct)     \
+        converts.o$(ct)         \
+        utf_cp.o$(ct)
 
 libs=../../LemmatizerLib/libLemmatizer$(ct).$(lib_ext)    \
       ../../AgramtabLib/libAgramtab$(ct).$(lib_ext)       \

@@ -1,6 +1,6 @@
 *.o
 *.lo
-
+*~
 
 # GNU Autoconf and Automake
 INSTALL
@@ -32,6 +32,8 @@ Bin/MorphGen
 Bin/RegressionTest
 Source/MorphGen/MorphGen
 Source/RegressionTest/RegressionTest
+examples/c/firstform
+examples/cpp/lemmatize
 
 Dicts/Morph/*/
 
@@ -61,3 +63,4 @@ pkgconfig/lemmatizer-rst.pc
 pkgconfig/lemmatizer-dsh.pc
 pkgconfig/lemmatizer-dst.pc
 pkgconfig/lemmatizer.pc
+perllib/Lemmatizer/Makefile.PL
