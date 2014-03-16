@@ -1,34 +1,25 @@
 #include <vector>
 #include <stdexcept>
 
+#include "../../common/utilit.h"
 #include "CMorphology.hpp"
 #include "LemInterface.hpp"
 #include "utf_cp.hpp"
 
-LemInterface::LemInterface(bool utf8) : utf8_(utf8){
+
+LemInterface::LemInterface(bool utf8) : utf8_(utf8) {
     morph_.reset(new CMorphology());
 
-    if (!morph_->Agramtab.LoadFromRegistry() || !morph_->RussianDict.LoadDictionariesRegistry()) {
+    if (!morph_->RussianDict.LoadDictionariesRegistry() || !morph_->Agramtab.LoadFromRegistry()) {
         throw std::runtime_error("Failed to load russian dictionary");
     }
-    
-    if ( !(plem_rus_ =  morph_->GetLemmatizer(morphRussian)) ) {
-        throw std::runtime_error("Failed to get lemmatizer");
+
+    if (!morph_->EnglishDict.LoadDictionariesRegistry() || !morph_->Egramtab.LoadFromRegistry()) {
+        throw std::runtime_error("Failed to load english dictionary");
     }
+    
 }
 
-
-short LemInterface::partOfSpeech(const std::string &word1251) {
-    std::vector<CFormInfo> paradigms;
-    std::string w = word1251;
-
-    plem_rus_->CreateParadigmCollection(false, w, false /* isUppercased */, paradigms);
-    if (paradigms.empty())
-        return -1;
-
-    std::string GramCodes = paradigms[0].GetSrcAncode();
-    return morph_->GetGramTab(morphRussian)->GetPartOfSpeech(GramCodes.c_str());
-}
 
 /**
  * Input and output is always UTF-8
@@ -49,7 +40,8 @@ bool LemInterface::Lemmatize(const std::string &word, result_t *res, int flags /
         word_cp1251 = word;
     }
 
-    std::vector<std::string> fforms = morph_->GetFirstForm(morphRussian, word_cp1251);
+    MorphLanguageEnum lang = IsRussian(word_cp1251) ? morphRussian : morphEnglish;
+    std::vector<std::string> fforms = morph_->GetFirstForm(lang, word_cp1251);
     if (fforms.empty()) {
         return false;
     }
@@ -61,13 +53,26 @@ bool LemInterface::Lemmatize(const std::string &word, result_t *res, int flags /
     }
 
     if (flags & FILL_PART_OF_SPEECH) {
-        short c = partOfSpeech(word_cp1251);
+        std::vector<CFormInfo> paradigms;
+       
+        // TODO: join it with first form
+        const CLemmatizer *plem = morph_->GetLemmatizer(lang);
+        plem->CreateParadigmCollection(false, word_cp1251, false /* isUppercased */, paradigms);
 
-        if (utf8_) {
-            std::string tmp = morph_->Agramtab.GetPartOfSpeechStr(c);
-            gogo::conv_str(gogo::CONV_CP1251, gogo::CONV_UTF8, tmp, &res->part_of_speech);
-        } else {
-            res->part_of_speech = morph_->Agramtab.GetPartOfSpeechStr(c);
+        if (paradigms.empty()) {
+            res->part_of_speech.clear();
+        }
+        else {
+            std::string GramCodes = paradigms[0].GetSrcAncode();
+            const CAgramtab* gtab = morph_->GetGramTab(lang);
+            short c = gtab->GetPartOfSpeech(GramCodes.c_str());
+
+            if (lang == morphRussian && utf8_) {
+                std::string tmp = gtab->GetPartOfSpeechStr(c);
+                gogo::conv_str(gogo::CONV_CP1251, gogo::CONV_UTF8, tmp, &res->part_of_speech);
+            } else {
+                res->part_of_speech = gtab->GetPartOfSpeechStr(c);
+            }
         }
     }
 

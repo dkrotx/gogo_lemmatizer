@@ -23,11 +23,7 @@ public:
     bool Lemmatize(const std::string &word, result_t *res, int flags = 0);
 
 private:
-    short partOfSpeech(const std::string &word1251);
-
-private:
     std::auto_ptr<CMorphology> morph_;
-    const CLemmatizer *plem_rus_;
     bool utf8_;    
 };
 
