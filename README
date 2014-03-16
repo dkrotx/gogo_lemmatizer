@@ -3,14 +3,26 @@ Lemmatizer from AOT group (http://lemmatizer.org/) with *just* autotools added.
 
 INSTALLATION:
 =============
-# unless you have ./configure (git?) launch `autoconf' first
-$ autoconf 
+
+# unless you have ./configure file (git repository?) launch `autoconf' first:w
+$ autoconf -fiv
 
 $ ./configure
 $ make
 $ sudo make install
 
 lemmatizer will be installed to /usr/local/lemmatizer with aditional symlink to /usr/lemmatizer
+
+EXAMPLES:
+=========
+
+You can find examples of usage in examples directory.
+ - examples/c/firstform.c - example of using pure C lemmatizer (poor interface actually)
+ - examples/cpp/lemmatize.cpp - example of using LemInterface.
+
+to build examples you may use their Makefiles.
+Building an examples supposes what lemmatizer is _already installed_.
+
 
 DOCUMENTATION:
 ==============
