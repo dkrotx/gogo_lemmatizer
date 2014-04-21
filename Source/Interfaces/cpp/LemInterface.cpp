@@ -78,3 +78,13 @@ bool LemInterface::Lemmatize(const std::string &word, result_t *res, int flags /
 
     return true;
 }
+
+
+bool LemInterface::FirstForm(const std::string &word, std::string *out) {
+    result_t res;
+    if (!Lemmatize(word, &res))
+        return false;
+
+    *out = res.first_form;
+    return true;
+}

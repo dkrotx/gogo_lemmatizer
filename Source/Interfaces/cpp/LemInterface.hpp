@@ -21,6 +21,7 @@ public:
 
 public:
     bool Lemmatize(const std::string &word, result_t *res, int flags = 0);
+    bool FirstForm(const std::string &word, std::string *out);
 
 private:
     std::auto_ptr<CMorphology> morph_;
