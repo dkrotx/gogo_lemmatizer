@@ -37,7 +37,9 @@ Source/TestLem/TestLem
 examples/c/firstform
 examples/cpp/lemmatize
 
-Dicts/Morph/*/
+Dicts/Morph/Rus/*
+Dicts/Morph/Eng/*
+Dicts/Morph/Ger/*
 
 
 
