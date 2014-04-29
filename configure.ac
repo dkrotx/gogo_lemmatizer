@@ -8,7 +8,6 @@ AC_PROG_LIBTOOL
 # Checks for programs.
 AC_PROG_CXX
 
-AC_CONFIG_MACRO_DIR([m4])
 m4_include([m4.incl/ax_path_lib_pcre.m4])
 
 AX_PATH_LIB_PCRE([], AC_MSG_ERROR([Could not find libpcre]))
@@ -52,6 +51,7 @@ AC_OUTPUT( Source/AgramtabLib/Makefile \
            Source/MorphWizardLib/Makefile \
            Source/StructDictLib/Makefile \
            Source/RegressionTest/Makefile \
+           Source/TestLem/Makefile \
            Makefile \
            pkgconfig/lemmatizer.pc \
          )

@@ -27,12 +27,13 @@ missing
 .dirstamp
 stamp-h1
 *.tar.gz
+.libs
 
-# executables
 Bin/MorphGen
 Bin/RegressionTest
 Source/MorphGen/MorphGen
 Source/RegressionTest/RegressionTest
+Source/TestLem/TestLem
 examples/c/firstform
 examples/cpp/lemmatize
 
