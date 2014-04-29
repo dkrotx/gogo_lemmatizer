@@ -7,7 +7,8 @@ INSTALL
 depcomp
 ltmain.sh
 libtool
-/Makefile
+Makefile
+Makefile.in
 *.scan
 aclocal.m4
 autom4te.cache

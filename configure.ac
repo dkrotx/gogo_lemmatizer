@@ -1,9 +1,14 @@
 AC_PREREQ(2.53)
-AC_INIT()
+AC_INIT([gogo_lemmatizer], [1.0], [jdkrot@gmail.com])
+AM_INIT_AUTOMAKE
+
+LT_INIT
+AC_PROG_LIBTOOL
 
 # Checks for programs.
 AC_PROG_CXX
 
+AC_CONFIG_MACRO_DIR([m4])
 m4_include([m4.incl/ax_path_lib_pcre.m4])
 
 AX_PATH_LIB_PCRE([], AC_MSG_ERROR([Could not find libpcre]))
@@ -38,16 +43,18 @@ AC_SUBST(RMLROOT)
 COMPAT_DIR="/usr/lemmatizer"
 AC_SUBST(COMPAT_DIR)
 
-AC_OUTPUT( Makefile \
-           Source/common/common_exe_mak \
-           Source/common/common_lib_mak \
-           pkgconfig/lemmatizer-rsh.pc \
-           pkgconfig/lemmatizer-rst.pc \
-           pkgconfig/lemmatizer-dsh.pc \
-           pkgconfig/lemmatizer-dst.pc \
+AC_OUTPUT( Source/AgramtabLib/Makefile \
+           Source/GraphanLib/Makefile \
+           Source/Interfaces/cpp/Makefile \
+           Source/Interfaces/c/Makefile
+           Source/LemmatizerLib/Makefile \
+           Source/MorphGen/Makefile \
+           Source/MorphWizardLib/Makefile \
+           Source/StructDictLib/Makefile \
+           Source/RegressionTest/Makefile \
+           Makefile \
            pkgconfig/lemmatizer.pc \
          )
 
 AC_MSG_NOTICE([ ])
 AC_MSG_NOTICE([ "Lemmatizer will be installed to : ${RMLROOT}" ])
-
