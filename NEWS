@@ -1,0 +1,1 @@
+- Now in automake variant. This shoule solve many problems with parallel compilation etc.
