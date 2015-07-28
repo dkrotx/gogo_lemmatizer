@@ -19,16 +19,16 @@ public:
 
 	char name[MaxNameSize];
 
-	bool operator==(const CEnglishName& _X) const
-	{ return strcmp (name, _X.name) == 0;};
+	bool operator==(const CEnglishName& comparand) const
+	{ return strcmp (name, comparand.name) == 0;};
 
-	bool operator<(const CEnglishName& _X) const
-	{ return strcmp (name, _X.name) < 0;};
+	bool operator<(const CEnglishName& comparand) const
+	{ return strcmp (name, comparand.name) < 0;};
 
 };
-inline bool EnglishNameLess (const CEnglishName& _Y, const char* _X) 
+inline bool EnglishNameLess (const CEnglishName& comparand1, const char* comparand2) 
 { 
-	return strcmp (_Y.name, _X) < 0;
+	return strcmp (comparand1.name, comparand2) < 0;
 };
 
 

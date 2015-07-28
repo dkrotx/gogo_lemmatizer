@@ -54,18 +54,18 @@ public:
 
 	bool HasEmptyArticle () const  {return m_StartCortegeNo == InitialStartPos;};
 
-	bool operator==(const CStructEntry& _X) const
+	bool operator==(const CStructEntry& comparand) const
 	{	
-		return    !strcmp (m_EntryStr, _X.m_EntryStr)
-				&& (m_MeanNum == _X.m_MeanNum); 
+		return    !strcmp (m_EntryStr, comparand.m_EntryStr)
+				&& (m_MeanNum == comparand.m_MeanNum); 
 	}
 
-	bool operator<(const CStructEntry& _X) const
+	bool operator<(const CStructEntry& comparand) const
 	{ 
-		int i = strcmp (m_EntryStr, _X.m_EntryStr);
+		int i = strcmp (m_EntryStr, comparand.m_EntryStr);
 		return   (i < 0) 
 			||(    (i == 0)
-			&& (m_MeanNum < _X.m_MeanNum)); 
+			&& (m_MeanNum < comparand.m_MeanNum)); 
 	}
 
 };	  
@@ -82,11 +82,11 @@ public:
 	  TUnitComment();
 	  TUnitComment(int _UnitId);
 
-      bool operator==(const TUnitComment& _X) const
-			{return    m_EntryId == _X.m_EntryId; }
+      bool operator==(const TUnitComment& comparand) const
+			{return    m_EntryId == comparand.m_EntryId; }
 
-      bool operator<(const TUnitComment& _X) const
-	  { return    m_EntryId < _X.m_EntryId;}
+      bool operator<(const TUnitComment& comparand) const
+	  { return    m_EntryId < comparand.m_EntryId;}
 
      
 };	  

@@ -1,8 +1,12 @@
 Lemmatizer from AOT group (http://lemmatizer.org/) with *just* autotools added.
+... and patched to compile under CygWin. [--Pav]
 
 
 INSTALLATION:
 =============
+
+GNU / Linux:
+-----------
 
 # unless you have ./configure file (git repository?) launch `autoconf' first:w
 $ autoconf -fiv
@@ -13,6 +17,39 @@ $ sudo make install
 
 lemmatizer will be installed to /usr/local/lemmatizer with aditional symlink to /usr/lemmatizer
 
+CygWin:
+------
+
+To compile staticaly-linked executables, and library objects on CygWin, you
+will need libpcre's shared objects for static linking.
+
+To compile them, run your CygWin setup-x86.exe, or setup-x86_64.exe to install
+the necessary packages.  Make sure you have the 'Src?' column ticked for
+'libpcre1'.  Also, make sure to install autoconf, cygport, g++, zlib-devel,
+libbz2-devel.
+
+Once your packages are installed,:
+
+$ cd /usr/src/pcre-*.src # Depending on the pcre version number.
+$ cygport pcre.cygport prep
+$ cygport pcre.cygport compile
+
+After the libpcre build successfully completes, go back to your gogo_lemmatizer
+directory.
+
+$ autoconf
+$  ./configure --with-pcre-objs=/usr/src/pcre-*.src/pcre-*.x86_64/build/.libs/ # Depending on the pcre version number.
+
+$ make
+
+Then, you should be able to do:
+
+# make install
+
+Have a look at the Run-time Configuration section on how to make sure a binary
+can find its dictionary files, and DLLs.
+
+
 EXAMPLES:
 =========
 
@@ -20,8 +57,42 @@ You can find examples of usage in examples directory.
  - examples/c/firstform.c - example of using pure C lemmatizer (poor interface actually)
  - examples/cpp/lemmatize.cpp - example of using LemInterface.
 
-to build examples you may use their Makefiles.
-Building an examples supposes what lemmatizer is _already installed_.
+to build the examples you may use their Makefiles.
+Building these examples requires that lemmatizer is _already installed_.
+
+ - examples/cpp/lemmatize2 - Modification of lemmatize.cpp to process words
+   from a file stream, and output JSON.
+
+This example does not require that lemmatizer is installed, or that you have
+`pkg-config`.  However, you need to set your environment variable 'RML', or run
+from an approprate working directory.  See Run-time Configuration.
+
+
+Run-time Configuration
+======================
+
+The lemmatizer library will search for the <Dicts> directory to load lemma
+dictionaries (compiled during the build process).  You can set the 'RML'
+environment variable to the lemmatizer path that contains the <Dicts> directory
+to be able to run an executable linked against the lemmatizer library.  If
+'RML' in not set, a hard-coded list of directory paths is tried: (See
+`getRMLDirectory()` in <Source/common/utilit.cpp>.)
+
+	./lemmatizer
+	/usr/local/lemmatizer
+	/usr/lemmatizer
+
+Running Outside CygWin
+----------------------
+
+The binaries produced by CygWin's GCC will depend on a number of CygWin DLLs to
+run.  You can your CygWin's <bin> directory to your PATH environment variable
+to find them, or ship them with your executables.
+
+You may need, at least, the following (Version numbers may vary.):
+
+	cyggcc_s-seh-1.dll cygiconv-2.dll cygpcre-1.dll cygstdc++-6.dll
+	cygwin1.dll
 
 
 DOCUMENTATION:

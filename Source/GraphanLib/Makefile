@@ -1,19 +1,22 @@
 include ../common/common_mak
 VPATH = ../
-LibName = libGraphan$(ct)
+LibBaseName = Graphan
 
-objects =  C_desc.o$(ct) \
-Consent.o$(ct) \
-Cs_hiera.o$(ct) \
-GraphmatFile.o$(ct) \
-HtmlConv.o$(ct) \
-Nc_desc.o$(ct) \
-Writegra.o$(ct) \
-abbrev.o$(ct) \
-graline.o$(ct) \
-Oborots.o$(ct) \
-UnitHolder.o$(ct) \
-GraphanDicts.o$(ct) \
-Sentences.o$(ct)
+object_base_names = C_desc \
+		    Consent \
+		    Cs_hiera \
+		    GraphmatFile \
+		    HtmlConv \
+		    Nc_desc \
+		    Writegra \
+		    abbrev \
+		    graline \
+		    Oborots \
+		    UnitHolder \
+		    GraphanDicts \
+		    Sentences \
+		    ../common/utilit
+
+libs = ../StructDictLib/libStructDict$(ct).$(lib_ext)
 
 include ../common/common_lib_mak

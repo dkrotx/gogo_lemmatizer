@@ -15,11 +15,11 @@ struct CMorphForm
 		m_PrefixStr = PrefixStr;
 		assert (!m_Gramcode.empty());
 	};
-	bool		operator == (const CMorphForm& _X) const 
+	bool		operator == (const CMorphForm& comparand) const 
 	{
-		return			m_Gramcode == _X.m_Gramcode
-					&&	m_FlexiaStr == _X.m_FlexiaStr
-					&&	m_PrefixStr == _X.m_PrefixStr;
+		return		m_Gramcode == comparand.m_Gramcode
+				&&	m_FlexiaStr == comparand.m_FlexiaStr
+				&&	m_PrefixStr == comparand.m_PrefixStr;
 	};
 
 };
@@ -30,9 +30,9 @@ struct  CFlexiaModel
 {
 	vector<CMorphForm>	m_Flexia;
 
-	bool		operator == (const CFlexiaModel& _X) const 
+	bool		operator == (const CFlexiaModel& comparand) const 
 	{
-		return	m_Flexia == _X.m_Flexia;
+		return	m_Flexia == comparand.m_Flexia;
 	};
 	bool		ReadFromString(const string& s);
 	string		ToString() const;
@@ -50,9 +50,9 @@ struct CAccentModel
 {
 	vector<BYTE> m_Accents;
 
-	bool operator == (const CAccentModel& _X) const
+	bool operator == (const CAccentModel& comparand) const
 	{
-		return m_Accents == _X.m_Accents;
+		return m_Accents == comparand.m_Accents;
 
 	};
 	bool		ReadFromString(const string& s);

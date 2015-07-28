@@ -2,25 +2,27 @@
 
 VPATH = ../
 
-include ../common/common_mak
-
-
 common_parms := -I.
 include ../common/common_mak
-LibName = libLemmatizer$(ct)
+LibBaseName = Lemmatizer
 
 
-objects = Lemmatizers.o$(ct) \
-Paradigm.o$(ct) \
-CreatePredictionBase.o$(ct) \
-PLMLineCollection.o$(ct) \
-Statistic.o$(ct) \
-MorphAutomat.o$(ct) \
-MorphAutomBuilder.o$(ct) \
-MorphDict.o$(ct) \
-MorphDictBuilder.o$(ct) \
-../common/PlmLine.o$(ct) \
-Predict.o$(ct) \
-../common/MorhologyHolder.o$(ct)
+object_base_names = Lemmatizers \
+		    Paradigm \
+		    CreatePredictionBase \
+		    PLMLineCollection \
+		    Statistic \
+		    MorphAutomat \
+		    MorphAutomBuilder \
+		    MorphDict \
+		    MorphDictBuilder \
+		    Predict \
+		    ../common/PlmLine \
+		    ../common/MorhologyHolder
+
+libs = ../AgramtabLib/libAgramtab$(ct).$(lib_ext) \
+       ../GraphanLib/libGraphan$(ct).$(lib_ext) \
+       ../MorphWizardLib/libMorphWizard$(ct).$(lib_ext)
+
 
 include ../common/common_lib_mak

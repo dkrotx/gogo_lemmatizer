@@ -33,11 +33,11 @@ struct CSignat {
    int    SignatId;
    int    OrderNo;
 
-   bool operator==(const CSignat& _X) const
-			{return     OrderNo == _X.OrderNo; }
+   bool operator==(const CSignat& comparand) const
+			{return     OrderNo == comparand.OrderNo; }
 
-   bool operator<(const CSignat& _X) const
-	 { return   (OrderNo < _X.OrderNo); }
+   bool operator<(const CSignat& comparand) const
+	 { return   (OrderNo < comparand.OrderNo); }
 
 };
 

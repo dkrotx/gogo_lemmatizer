@@ -15,8 +15,8 @@ struct  CAbbrevItem
 {
 	AbbrevItemTypeEnum	m_Type;
 	string				m_ItemStr;
-	bool operator == (const CAbbrevItem _X) const;
-	bool operator < (const CAbbrevItem _X) const;
+	bool operator == (const CAbbrevItem comparand) const;
+	bool operator < (const CAbbrevItem comparand) const;
 
 	
 };

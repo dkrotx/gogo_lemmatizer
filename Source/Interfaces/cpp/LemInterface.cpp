@@ -11,11 +11,11 @@ LemInterface::LemInterface(bool utf8) : utf8_(utf8) {
     morph_.reset(new CMorphology());
 
     if (!morph_->RussianDict.LoadDictionariesRegistry() || !morph_->Agramtab.LoadFromRegistry()) {
-        throw std::runtime_error("Failed to load russian dictionary");
+        throw std::runtime_error("Failed to load Russian dictionary!  (Make sure the RML environment variable is set, or lemmatizer is installed.)");
     }
 
     if (!morph_->EnglishDict.LoadDictionariesRegistry() || !morph_->Egramtab.LoadFromRegistry()) {
-        throw std::runtime_error("Failed to load english dictionary");
+        throw std::runtime_error("Failed to load English dictionary!");
     }
     
 }

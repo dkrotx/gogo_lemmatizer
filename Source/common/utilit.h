@@ -588,11 +588,11 @@ extern void ConvertJO2Je(char* src);
 
 
 template <class T, class Pred, class Conv>
-T& RegisterConverter (T& word, size_t Len, Pred _P,  Conv _C)
+T& RegisterConverter (T& word, size_t Len, Pred predicate,  Conv converter)
 {
 	for( size_t i = 0 ; i < Len; i++ )
-        if ( _P( (BYTE)word[i] )  )
-			word[i] = _C ( (BYTE)word[i] );
+        if ( predicate( (BYTE)word[i] )  )
+			word[i] = converter ( (BYTE)word[i] );
 
     return word;
 }

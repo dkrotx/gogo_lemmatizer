@@ -1,0 +1,208 @@
+# Some utility functions:
+# [--Pav]
+
+##
+# Returns the relative path of the last Makefile included for parsing by
+# `make`.
+#
+# If you call this before any include statements, you can get the relative path
+# of the Makefile this statement appears in.
+#
+# If you prepend the value `$(CURDIR)/` of `make`'s current workind directory,
+# you can get the ablosute path to the Makefile.
+#
+# From <http://blog.jgc.org/2007/01/what-makefile-am-i-in.html>:
+get_last_makefile_relative_path = $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
+
+
+# Other macros:
+
+##
+# Expands to a list of compiler parameters needed to output a shared library
+# object with the given name.
+#
+# On Linux the result could be as simple as '-o libname.so'.  In other
+# environments, such as Cygwin multiple flags may be needed, and more than one
+# output file may be generated for a shared library.
+#
+# This macro is defined below based on the the build environment detected.
+#
+# $(1)  The library base name (without 'lib' prefix).
+#
+# $(call construct_shlib_output_flags,libname)
+
+##
+# Expands to a space-delimited list of file names that will be output for a
+# library with a given name.
+#
+# On Linux the result would often be a simple 'libname.so'.  In other
+# environments, such as Cygwin, multiple files may result for a single shared
+# object.  (Such as a 'cygname.dll', and a 'libname.dll.a'.)
+#
+# This macro is defined below based on the build environment detected.
+#
+# $(1)  The library base name (without 'lib' prefix).
+#
+# $(call construct_lib_output_files,libname)
+
+##
+# Expands to a list of compiler flags needed to link with the shared libraries
+# an output objects depends on.
+#
+# If you are compiling in libmode=shared, these would usually be a list of
+# '-Lpath' and '-lname' flags.  In libmode=static, you should get a list of
+# object file arhcives.
+#
+# This macro is defined below based on the build mode detected.
+#
+# $(1)  The space-delimited list of the currently built object's dependency
+# libraries in this project.
+#
+# $(call construct_cxx_libs_flags,$(libs))
+
+##
+# Constructs a list of all possible output file names from a library base name.
+#
+# $(1)  The $(LibBaseName) portion of the library name.  I.e., without a 'lib'
+#       prefix, and without a $(ct) suffix.
+construct_possible_lib_output_files = \
+	$(foreach lib_ext_value,$(lib_ext_values), \
+		$(addsuffix .$(lib_ext_value),$(addprefix cyg$(1),$(ct_values))) \
+                $(addsuffix .$(lib_ext_value),$(addprefix lib$(1),$(ct_values))))
+
+
+common_mak_relative_path := $(call get_last_makefile_relative_path)
+common_mak_relative_directory := $(dir $(common_mak_relative_path))
+
+ifndef RML
+	# We're not building from the top-level Makefile, set a default:
+	RML := $(common_mak_relative_directory)../../
+endif
+
+# in order to compile with stlport, set stlport to 1
+stlport := 0
+
+ifeq ($(stlport), 1)
+	cparams := -I../stl/stlport 
+	stllib :=  -L./lib/ -lstlport_gcc
+endif
+
+ifndef libmode
+	libmode := shared 
+endif
+
+# All the possible values of $(ct), depending on the possible values of
+# $(mode).  (Used for cleaning.)
+ct_mode_values := d td t r
+
+ifeq ($(mode), debug)
+	cparams := $(cparams) -MD -c -O0 -g $(common_parms)
+	ct := d
+else
+	ifeq ($(mode), debug_thread)
+		cparams := $(cparams) -MD -c -O0 -g $(common_parms)
+		lparams :=
+		ct := td
+	else
+		ifeq ($(mode), release_thread)
+			cparams := $(cparams) -MD -c -O3 -funroll-loops $(common_parms)
+			ct := t
+			lparams := 
+		else
+			ct := r
+			ifeq ($(mode), profile)
+				cparams := $(cparams) -fprofile-arcs  -pg -g -MD -c -O3 -funroll-loops $(common_parms)
+				lparams := -pg
+			else
+				ifeq ($(mode), release)
+					cparams := $(cparams) -MD -c -O3 -funroll-loops $(common_parms)
+				else
+					mode_error =  $(error unknown mode. It can be debug, release, profile, debug_thread, release_thread)	
+				endif	
+			endif
+		endif
+	endif
+endif
+
+#
+#ifneq ($(ct), r)
+#	ifneq ($(ct), rs)
+#		ExeExten = $(ct)
+#	endif
+#endif
+#
+
+ExeExten := @EXEEXT@
+
+# All the possible values of $(ct):
+ct_values := $(ct_mode_values:%=%st) $(ct_mode_values:%=%sh)
+
+# All the possible values of $(lib_ext).  (Used for cleaning.)
+lib_ext_values := a so dll dll.a
+
+ifeq ($(libmode), static)
+	ct := $(ct)st
+	lib_ext := a
+	lib_base_ext := a
+	cparams := $(cparams) -fPIC
+	LDFLAGS := -O3 -nostdlib 
+	ifneq ($(stlport), 1)
+		LDPATH :=
+		LDLIBS := /usr/lib/crt1.o /usr/lib/crti.o /usr/local/lib/gcc-lib/i686-pc-linux-gnu/3.2.2/crtbegin.o -L/usr/local/gcc3.2/lib/gcc-lib/i686-pc-linux-gnu/3.2 -L/usr/local/lib/gcc-lib/i686-pc-linux-gnu/3.2.2/../../.. -Wl,-Bstatic -lstdc++ -Wl,-Bdynamic -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/local/lib/gcc-lib/i686-pc-linux-gnu/3.2.2/crtend.o /usr/lib/crtn.o
+	endif
+
+	# Define construct_cxx_libs_flags:
+	construct_cxx_libs_flags = $(patsubst %,%.$(lib_ext),$(basename $(1)))
+else
+	ct := $(ct)sh
+	ifeq ($(ExeExten),.exe)
+		lib_ext := dll.a
+		lib_base_ext := dll
+	else
+		lib_ext := so
+		lib_base_ext := so
+	endif
+	cparams := $(cparams) -fPIC
+	
+	# Define construct_cxx_libs_flags.
+	# We have to use "--start-group --end-group" in order to solve
+	# cross-references:
+	construct_cxx_libs_flags = -Wl,--start-group $(addprefix -L,$(dir $(1))) $(patsubst lib%,-l%,$(basename $(notdir $(1)))) -Wl,--end-group
+endif
+
+CXX_LIB_LD_FLAGS := $(CXX_LD_FLAGS) -Wl,-no-undefined,--enable-runtime-pseudo-reloc
+
+# If we're compiling for an MS operating system, we won't have lazy symbol
+# resolution, all symbols will have to be resolved at link time.
+# 
+# Therefore, to compile a DLL, we'll have to specify all libraries that it
+# depends on.  We can't wait until an executable is compiled to resolve them.
+# [--Pav]
+ifeq ($(ExeExten),.exe)
+	# We assume that if @EXEEXT@ is ".exe", we're compiling for windows,
+	# and have strict symbol resolution.
+	DLL_LIST := $(wildcard $(common_mak_relative_directory)../../Bin/*.dll)
+	DLL_LIST := $(basename $(notdir $(DLL_LIST)))
+	DLL_LIST := $(filter lib%,$(DLL_LIST))
+	DLL_LIST := $(DLL_LIST:lib%=%)
+
+	CXX_LD_FLAGS := $(CXX_LD_FLAGS) -L$(common_mak_relative_directory)../../Bin
+
+	# Define construct_shlib_output_flags, and construct_lib_output_files:
+	ifeq ($(libmode), static)
+		CXX_SHLIB_FLAGS := $(CXX_SHLIB_FLAGS) @with_pcre_objs@/*pcre[.-]*dll @LIBICONV@
+		construct_lib_output_files = lib$(1).$(lib_ext)
+	else
+		CXX_SHLIB_FLAGS := $(addprefix -l,$(DLL_LIST)) $(CXX_SHLIB_FLAGS)
+		CXX_SHLIB_FLAGS := $(CXX_SHLIB_FLAGS) @PCRE_LIBS@ @LIBICONV@
+		construct_lib_output_files = cyg$(1).$(lib_base_ext) lib$(1).$(lib_ext)
+	endif
+	construct_shlib_output_flags = -o cyg$(1).$(lib_base_ext) $(CXX_LIB_LD_FLAGS) -Wl,--out-implib=lib$(1).$(lib_ext) -Wl,--export-all-symbols -Wl,--enable-auto-import
+else
+	CXX_SHLIB_FLAGS := $(CXX_SHLIB_FLAGS) @PCRE_LIBS@ @LIBICONV@
+	# Define construct_shlib_output_flags, and construct_lib_output_files:
+	construct_shlib_output_flags = -o lib$(1).$(lib_ext)
+	construct_lib_output_files = lib$(1).$(lib_ext)
+endif
+
+CXX_SHOBJ_FLAGS := $(CXX_OBJECTS) $(CXX_SHLIB_FLAGS)

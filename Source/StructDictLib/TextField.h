@@ -24,11 +24,11 @@ struct CTextField
 	  BracketLeafId = _BracketLeafId;
 	};
 
-	bool operator==(const CTextField& _X) const
+	bool operator==(const CTextField& comparand) const
 	{
-		  return    (FieldNo == _X.FieldNo)
-			        && (LeafId  == _X.LeafId)
-					&& (BracketLeafId  == _X.BracketLeafId);
+		  return    (FieldNo == comparand.FieldNo)
+			        && (LeafId  == comparand.LeafId)
+					&& (BracketLeafId  == comparand.BracketLeafId);
 	}
 
 };

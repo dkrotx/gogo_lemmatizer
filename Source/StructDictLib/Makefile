@@ -1,10 +1,10 @@
 include ../common/common_mak
-LibName = libStructDict$(ct)
+LibBaseName = StructDict
 
 
-objects = ItemsContainer.o$(ct) \
-Ross.o$(ct) \
-TempArticle.o$(ct) \
-../common/utilit.o$(ct)
+object_base_names = ItemsContainer \
+		    Ross \
+		    TempArticle \
+		    ../common/utilit
 
 include ../common/common_lib_mak

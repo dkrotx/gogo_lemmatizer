@@ -1,4 +1,10 @@
 include ../common/common_mak
-LibName =  libMorphWizard$(ct)
-objects = wizard.o$(ct)
+
+LibBaseName = MorphWizard
+
+object_base_names = wizard \
+		    ../common/utilit
+
+libs = ../AgramtabLib/libAgramtab$(ct).$(lib_ext)
+
 include ../common/common_lib_mak
