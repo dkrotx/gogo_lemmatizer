@@ -5,17 +5,21 @@ Lemmatizer from AOT group (http://lemmatizer.org/) with *just* autotools added.
 INSTALLATION:
 =============
 
+# unless you have ./configure file (git repository?) launch `autoconf' first:w
+$ aclocal
+$ automake --add-missing --force
+$ autoconf -f -i -v
+
+
 GNU / Linux:
 -----------
-
-# unless you have ./configure file (git repository?) launch `autoconf' first:w
-$ autoconf -fiv
 
 $ ./configure
 $ make
 $ sudo make install
 
 lemmatizer will be installed to /usr/local/lemmatizer with aditional symlink to /usr/lemmatizer
+
 
 CygWin:
 ------
@@ -37,7 +41,6 @@ $ cygport pcre.cygport compile
 After the libpcre build successfully completes, go back to your gogo_lemmatizer
 directory.
 
-$ autoconf
 $  ./configure --with-pcre-objs=/usr/src/pcre-*.src/pcre-*.x86_64/build/.libs/ # Depending on the pcre version number.
 
 $ make
@@ -65,7 +68,8 @@ Building these examples requires that lemmatizer is _already installed_.
 
 This example does not require that lemmatizer is installed, or that you have
 `pkg-config`.  However, you need to set your environment variable 'RML', or run
-from an approprate working directory.  See Run-time Configuration.
+from an approprate working directory, and make sure the liked can find your
+shared libraries.  See Run-time Configuration.
 
 
 Run-time Configuration
@@ -82,12 +86,21 @@ to be able to run an executable linked against the lemmatizer library.  If
 	/usr/local/lemmatizer
 	/usr/lemmatizer
 
-Running Outside CygWin
-----------------------
+
+Shared Libraries
+----------------
+
+Don't forget to make sure your dynamic linker can find the lemmatize shared
+libraries.  If you did not install them in a directory searched by your OS's
+linker, make sure you add a path to the contents of the <Bin> directory to
+LD_LIBRARY_PATH on Unix and Linux systems, and to your PATH on Windows systems.
+
+
+## Running CygWin-Compiled Binaries Outside CygWin
 
 The binaries produced by CygWin's GCC will depend on a number of CygWin DLLs to
-run.  You can your CygWin's <bin> directory to your PATH environment variable
-to find them, or ship them with your executables.
+run.  You can add your CygWin's <bin> directory to your PATH environment
+variable to find them, or ship them in the same directory as your executables.
 
 You may need, at least, the following (Version numbers may vary.):
 
