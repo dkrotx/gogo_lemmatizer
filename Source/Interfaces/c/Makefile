@@ -1,13 +1,14 @@
 include ../../common/common_mak
-LibName=libclemmatiser$(ct)
+LibBaseName = clemmatiser
 
-objects=clemmatiser.o$(ct)
+object_base_names = clemmatiser
 
-libs=../../LemmatizerLib/libLemmatizer$(ct).$(lib_ext)   \
-     ../../AgramtabLib/libAgramtab$(ct).$(lib_ext)       \
-     ../../GraphanLib/libGraphan$(ct).$(lib_ext)         \
-     ../../MorphWizardLib/libMorphWizard$(ct).$(lib_ext) \
-     ../../StructDictLib/libStructDict$(ct).$(lib_ext)
+libs = ../../AgramtabLib/libAgramtab$(ct).$(lib_ext)       \
+       ../../GraphanLib/libGraphan$(ct).$(lib_ext)         \
+       ../../LemmatizerLib/libLemmatizer$(ct).$(lib_ext)   \
+       ../../MorphWizardLib/libMorphWizard$(ct).$(lib_ext) \
+       ../../StructDictLib/libStructDict$(ct).$(lib_ext)   \
+       ../cpp/libSimpleLemmatiser$(ct).$(lib_ext)
 
 include ../../common/common_lib_mak
 

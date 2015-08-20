@@ -329,7 +329,7 @@ bool CLemmatizer::LoadDictionariesRegistry()
 	try
 	{
 		string load_path = GetPath();
-		m_bLoaded = Load(load_path+MORPH_MAIN_FILES);
+		m_bLoaded = Load(load_path + MORPH_MAIN_FILES);
 		if (!m_bLoaded) return false;
 
 		// implicity load homonyms statistic for literature
@@ -345,7 +345,7 @@ bool CLemmatizer::LoadDictionariesRegistry()
 
 		return m_bLoaded;
 	}
-	catch(...)
+	catch (...)
 	{
 		return false;
 	}

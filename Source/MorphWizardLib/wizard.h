@@ -37,10 +37,10 @@ struct CParadigmInfo : public CLemmaInfo
 
 	CParadigmInfo();
 	CParadigmInfo(WORD ParadigmNo, WORD AccentModelNo, WORD SessionNo, BYTE AuxAccent, const char* CommonAncode, WORD PrefixSetNo);
-	bool operator == (const CParadigmInfo& _X) const;
+	bool operator == (const CParadigmInfo& comparand) const;
 
 	static CParadigmInfo	AnyParadigmInfo();				// Nick [17/Dec/2003]
-	bool	IsAnyEqual( const CParadigmInfo& _X ) const;	// Nick [17/Dec/2003]
+	bool	IsAnyEqual( const CParadigmInfo& value ) const;	// Nick [17/Dec/2003]
 };
 
 
@@ -66,21 +66,21 @@ struct CPredictSuffix
 	size_t	m_Frequence;	
 	string  m_PrefixSetStr;
 
-	bool operator  < (const  CPredictSuffix& _X) const 
+	bool operator  < (const  CPredictSuffix& comparand) const 
 	{
-		if (m_FlexiaModelNo != _X.m_FlexiaModelNo)
-			return m_FlexiaModelNo < _X.m_FlexiaModelNo;
+		if (m_FlexiaModelNo != comparand.m_FlexiaModelNo)
+			return m_FlexiaModelNo < comparand.m_FlexiaModelNo;
 
-		if (m_SourceLemmaAncode != _X.m_SourceLemmaAncode)
-			m_SourceLemmaAncode < _X.m_SourceLemmaAncode;
+		if (m_SourceLemmaAncode != comparand.m_SourceLemmaAncode)
+			m_SourceLemmaAncode < comparand.m_SourceLemmaAncode;
 
-		return m_Suffix < _X.m_Suffix;
+		return m_Suffix < comparand.m_Suffix;
 	};
-	bool operator  == (const  CPredictSuffix& _X) const 
+	bool operator  == (const  CPredictSuffix& comparand) const 
 	{
-		return			(m_FlexiaModelNo == _X.m_FlexiaModelNo)
-					&&	(m_Suffix == _X.m_Suffix)
-					&&	(m_SourceLemmaAncode == _X.m_SourceLemmaAncode);
+		return			(m_FlexiaModelNo == comparand.m_FlexiaModelNo)
+					&&	(m_Suffix == comparand.m_Suffix)
+					&&	(m_SourceLemmaAncode == comparand.m_SourceLemmaAncode);
 	};
 };
 

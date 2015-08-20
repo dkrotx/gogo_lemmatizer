@@ -5,21 +5,16 @@
 SYSTEMCXX=@ac_systemcxx@
 
 ifeq "$(SYSTEMCXX)" "no"
-GCC_VERSION ?= 42
-CXX=g++${GCC_VERSION}
+	GCC_VERSION ?= 42
+	CXX=g++${GCC_VERSION}
 endif
 
+ExeName := $(ExeBaseName)$(ExeExten)
+objects := $(addsuffix .o$(ct),$(object_base_names))
 
-#lib_pathes := $(subst ..,-L..,$(subst %lib, -l,$(libs)))
-lib_pathes := $(subst ../..,doubleUP,$(subst lib, -l,$(libs)))
-lib_pathes := $(subst ..,-L..,$(lib_pathes))
-lib_pathes := $(subst doubleUP,-L../..,$(lib_pathes))
+possible_objects := $(foreach ct_value,$(ct_values),$(addsuffix .o$(ct_value),$(object_base_names)))
 
-
-
-# we have to use "--start-group --end-group" in order to solve cross-references
-
-libs_argument := -Wl,--start-group $(subst .$(lib_ext),,$(lib_pathes)) -Wl,--end-group
+libs_argument := $(call construct_cxx_libs_flags,$(libs))
 
 ifeq ($(libmode), static)
 	lib_mode_switch := -static
@@ -27,7 +22,7 @@ endif
 
 $(ExeName) : $(objects) $(libs)
 	$(mode_error)
-	$(CXX)  $(lib_mode_switch) $(lparams) $(objects) $(libs_argument) $(stllib) @PCRE_LIBS@ -o $(ExeName)
+	$(CXX)  $(lib_mode_switch) $(lparams) $(CXX_LD_FLAGS) -o $(ExeName) $(objects) $(libs_argument) $(stllib) $(CXX_SHOBJ_FLAGS)
 	cp $(ExeName) $(RML)/Bin/
 
 $(libs): %$(ct).$(lib_ext) : FORCE
@@ -44,6 +39,6 @@ FORCE:
 include $(wildcard *.d)
 
 clean: ;
-	-rm -f $(ExeName) $(objects) *.d
+	-rm -f $(ExeName) $(possible_objects) *.d
 	-for catal in $(dir $(libs)); do  $(MAKE) -C  $$catal mode=$(mode) clean; done
 

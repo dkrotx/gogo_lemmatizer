@@ -72,61 +72,61 @@ public:
 
 	};
 
-	bool HasEqualItems(const TBasicCortege& _X, BYTE _MaxNumDom)  const 
+	bool HasEqualItems(const TBasicCortege& value, BYTE maxNumDom)  const 
 	{  
-		for (BYTE i=0; i< _MaxNumDom;i++)
-			if (GetItem(i) != _X.GetItem(i))
+		for (BYTE i=0; i< maxNumDom; i++)
+			if (GetItem(i) != value.GetItem(i))
 				return false;
 		return true;
 	};
 
-	bool EqualCortege(const TBasicCortege& _X, BYTE _MaxNumDom)  const 
+	bool EqualCortege(const TBasicCortege& value, BYTE maxNumDom)  const 
 	{  
-	  return    (m_FieldNo  == _X.m_FieldNo)  
-	             && (m_SignatNo == _X.m_SignatNo)
-				 && (m_LevelId  == _X.m_LevelId)
-				 && (m_LeafId   == _X.m_LeafId)
-				 && (m_BracketLeafId   == _X.m_BracketLeafId)
-				 && HasEqualItems (_X, _MaxNumDom);
+	  return    (m_FieldNo  == value.m_FieldNo)  
+	             && (m_SignatNo == value.m_SignatNo)
+				 && (m_LevelId  == value.m_LevelId)
+				 && (m_LeafId   == value.m_LeafId)
+				 && (m_BracketLeafId   == value.m_BracketLeafId)
+				 && HasEqualItems (value, maxNumDom);
 	};
 
-	bool IsEqualWithWildCard(const TBasicCortege& _X, WORD EmptyDomItem, BYTE _MaxNumDom) const
+	bool IsEqualWithWildCard(const TBasicCortege& value, WORD EmptyDomItem, BYTE maxNumDom) const
 	{  
-		if    (!(   (m_FieldNo  == _X.m_FieldNo)  
+		if    (!(   (m_FieldNo  == value.m_FieldNo)  
 			 && (      (m_LevelId == ErrUChar)
-					|| (_X.m_LevelId == ErrUChar)
-					|| (m_LevelId == _X.m_LevelId)
+					|| (value.m_LevelId == ErrUChar)
+					|| (m_LevelId == value.m_LevelId)
 				)
 			 && (      (m_LeafId == ErrUChar)
-					|| (_X.m_LeafId == ErrUChar)
-					|| (m_LeafId == _X.m_LeafId)
+					|| (value.m_LeafId == ErrUChar)
+					|| (m_LeafId == value.m_LeafId)
 				)
 			 && (      (m_BracketLeafId == ErrUChar)
-					|| (_X.m_BracketLeafId == ErrUChar)
-					|| (m_BracketLeafId == _X.m_BracketLeafId)
+					|| (value.m_BracketLeafId == ErrUChar)
+					|| (m_BracketLeafId == value.m_BracketLeafId)
 				)
 
 			 )) return false;
 
-		for (size_t i=0; i< _MaxNumDom;i++)
-		   if (     (GetItem(i)  != _X.GetItem(i))
+		for (size_t i = 0; i < maxNumDom; i++)
+		   if (     (GetItem(i)  != value.GetItem(i))
 				&&  (GetItem(i)  != EmptyDomItem)
-				&&  (_X.GetItem(i) != EmptyDomItem)
+				&&  (value.GetItem(i) != EmptyDomItem)
 			  )
 		   return false; 
 
 		return true;
 	};
 
-	TBasicCortege<MaxNumDom>& operator = (const TBasicCortege<10>& _X)
+	TBasicCortege<MaxNumDom>& operator = (const TBasicCortege<10>& value)
 	{
-		m_FieldNo = _X.m_FieldNo;
-		m_LeafId = _X.m_LeafId;
-		m_BracketLeafId = _X.m_BracketLeafId;
-		m_LevelId = _X.m_LevelId;
-		m_SignatNo = _X.m_SignatNo;
-		for (int i =0; i < MaxNumDom; i++)
-			SetItem(i, _X.GetItem(i));
+		m_FieldNo = value.m_FieldNo;
+		m_LeafId = value.m_LeafId;
+		m_BracketLeafId = value.m_BracketLeafId;
+		m_LevelId = value.m_LevelId;
+		m_SignatNo = value.m_SignatNo;
+		for (int i = 0; i < MaxNumDom; i++)
+			SetItem(i, value.GetItem(i));
 
 		return *this;
 	};
@@ -188,25 +188,25 @@ struct TCortege10 : public TBasicCortege<10>
 		m_BracketLeafId = 0;
 	};
 
-	TCortege10 (const TBasicCortege<3>& _X)
+	TCortege10 (const TBasicCortege<3>& copySource)
 	{
-		m_FieldNo = _X.m_FieldNo;
-		m_LeafId = _X.m_LeafId;
-		m_BracketLeafId =  _X.m_BracketLeafId;
-		m_LevelId = _X.m_LevelId;
-		m_SignatNo = _X.m_SignatNo;
-		for (int i =0; i < 3; i++)
-			SetItem(i, _X.GetItem(i));
+		m_FieldNo = copySource.m_FieldNo;
+		m_LeafId = copySource.m_LeafId;
+		m_BracketLeafId = copySource.m_BracketLeafId;
+		m_LevelId = copySource.m_LevelId;
+		m_SignatNo = copySource.m_SignatNo;
+		for (int i = 0; i < 3; i++)
+			SetItem(i, copySource.GetItem(i));
 	};
-	TCortege10 (const TBasicCortege<10>& _X)
+	TCortege10 (const TBasicCortege<10>& copySource)
 	{
-		m_FieldNo = _X.m_FieldNo;
-		m_LeafId = _X.m_LeafId;
-		m_BracketLeafId = _X.m_BracketLeafId;
-		m_LevelId = _X.m_LevelId;
-		m_SignatNo = _X.m_SignatNo;
-		for (int i =0; i < 10; i++)
-			SetItem(i, _X.GetItem(i));
+		m_FieldNo = copySource.m_FieldNo;
+		m_LeafId = copySource.m_LeafId;
+		m_BracketLeafId = copySource.m_BracketLeafId;
+		m_LevelId = copySource.m_LevelId;
+		m_SignatNo = copySource.m_SignatNo;
+		for (int i = 0; i < 10; i++)
+			SetItem(i, copySource.GetItem(i));
 	};
 
 

@@ -20,7 +20,7 @@ struct CSmallVector	{
 	void Add (Type	Item)
 	{
 		//assert(m_ItemsCount < Size-1);
-		//	â Release ïðîñòî íå	áóäåì äîáàâëÿòü	îòíîøåíèÿ, åñëè	èõ ñëèøêîì ìíîãî
+		//	Ã¢ Release Ã¯Ã°Ã®Ã±Ã²Ã® Ã­Ã¥	Ã¡Ã³Ã¤Ã¥Ã¬ Ã¤Ã®Ã¡Ã Ã¢Ã«Ã¿Ã²Ã¼	Ã®Ã²Ã­Ã®Ã¸Ã¥Ã­Ã¨Ã¿, Ã¥Ã±Ã«Ã¨	Ã¨Ãµ Ã±Ã«Ã¨Ã¸ÃªÃ®Ã¬ Ã¬Ã­Ã®Ã£Ã®
 		if	(m_ItemsCount >= Size-1)
 			return;
 		m_Items[m_ItemsCount++] = Item;
@@ -28,7 +28,7 @@ struct CSmallVector	{
 	void Insert (int No, Type Item)
 	{
 		//assert(m_RelsCount <	MaxRelSet-1);
-		//	â Release ïðîñòî íå	áóäåì äîáàâëÿòü	îòíîøåíèÿ, åñëè	èõ ñëèøêîì ìíîãî
+		//	Ã¢ Release Ã¯Ã°Ã®Ã±Ã²Ã® Ã­Ã¥	Ã¡Ã³Ã¤Ã¥Ã¬ Ã¤Ã®Ã¡Ã Ã¢Ã«Ã¿Ã²Ã¼	Ã®Ã²Ã­Ã®Ã¸Ã¥Ã­Ã¨Ã¿, Ã¥Ã±Ã«Ã¨	Ã¨Ãµ Ã±Ã«Ã¨Ã¸ÃªÃ®Ã¬ Ã¬Ã­Ã®Ã£Ã®
 		if	(m_ItemsCount >= Size-1)
 			return;
 
@@ -62,9 +62,9 @@ struct CSmallVector	{
 
 	const Type& operator[](int	No)	const {	return m_Items[No];	};
 
-	size_t find_item (const Type& _X) const { return find(m_Items, m_Items+m_ItemsCount, _X) - m_Items; };
+	size_t find_item (const Type& value) const { return find(m_Items, m_Items+m_ItemsCount, value) - m_Items; };
 
-	bool	has (const Type& _X) const { return find_item(_X) != m_ItemsCount; };
+	bool	has (const Type& value) const { return find_item(value) != m_ItemsCount; };
 
 
 };

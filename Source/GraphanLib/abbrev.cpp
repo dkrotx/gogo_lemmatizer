@@ -34,22 +34,22 @@ struct CStrToCompare {
 
 };
 
-bool CAbbrevItem::operator == (const CAbbrevItem _X) const
+bool CAbbrevItem::operator == (const CAbbrevItem comparand) const
 {
-	return		(m_ItemStr == _X.m_ItemStr);
+	return		(m_ItemStr == comparand.m_ItemStr);
 };
 
 
-bool CAbbrevItem::operator < (const CAbbrevItem _X) const
+bool CAbbrevItem::operator < (const CAbbrevItem comparand) const
 {
-	return m_ItemStr < _X.m_ItemStr;
+	return m_ItemStr < comparand.m_ItemStr;
 };
 
-inline bool AbbrevIsEqualToString (const CAbbrevItem& _X, const CStrToCompare& Str) 
+inline bool AbbrevIsEqualToString (const CAbbrevItem& value, const CStrToCompare& Str) 
 {
-	switch (_X.m_Type)
+	switch (value.m_Type)
 	{
-		case abString: return (_X.m_ItemStr.length() == Str.m_StrLen) && !strncmp(_X.m_ItemStr.c_str(), Str.m_Str, Str.m_StrLen);
+		case abString: return (value.m_ItemStr.length() == Str.m_StrLen) && !strncmp(value.m_ItemStr.c_str(), Str.m_Str, Str.m_StrLen);
 		case abNumber: return (Str.m_StrLen > 0)&& isdigit((BYTE)Str.m_Str[0]);
 		case abUpperCase: return (Str.m_StrLen > 0)&& (is_upper_alpha((BYTE)Str.m_Str[0], Str.m_Language) || is_upper_alpha((BYTE)Str.m_Str[0], Str.m_Language));
 		case abAny: return (Str.m_StrLen > 0);
@@ -58,22 +58,22 @@ inline bool AbbrevIsEqualToString (const CAbbrevItem& _X, const CStrToCompare& S
 	return true;
 };
 
-inline bool AbbrevIsLessThanString (const CAbbrevItem& _X, const CStrToCompare& Str) 
+inline bool AbbrevIsLessThanString (const CAbbrevItem& value, const CStrToCompare& Str) 
 {
-	size_t min_len = (_X.m_ItemStr.length()<Str.m_StrLen) ? _X.m_ItemStr.length() :  Str.m_StrLen;
+	size_t min_len = (value.m_ItemStr.length()<Str.m_StrLen) ? value.m_ItemStr.length() :  Str.m_StrLen;
 
-	int t  = strncmp(_X.m_ItemStr.c_str(), Str.m_Str, min_len);
+	int t  = strncmp(value.m_ItemStr.c_str(), Str.m_Str, min_len);
 
 	return		(t > 0) 
 			||	(		(t == 0)
-					&&	(_X.m_ItemStr.length() > Str.m_StrLen)
+					&&	(value.m_ItemStr.length() > Str.m_StrLen)
 				);
 };
 
 
-inline bool IsLess ( const CAbbrev& _X1,  const CStrToCompare& Str ) 
+inline bool IsLess ( const CAbbrev& value,  const CStrToCompare& Str ) 
 {
-	return AbbrevIsLessThanString (*_X1.begin(), Str );
+	return AbbrevIsLessThanString (*value.begin(), Str );
 };
 
 const char* NumberPlace = "/:D";

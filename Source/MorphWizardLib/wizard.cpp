@@ -152,13 +152,13 @@ CParadigmInfo::CParadigmInfo(WORD ParadigmNo, WORD AccentModelNo, WORD SessionNo
 	m_PrefixSetNo = PrefixSetNo;
 };
 
-bool CParadigmInfo:: operator  == (const CParadigmInfo& _X) const
+bool CParadigmInfo:: operator  == (const CParadigmInfo& comparand) const
 {
-	return		m_FlexiaModelNo == _X.m_FlexiaModelNo 
-			&&	m_AccentModelNo == _X.m_AccentModelNo
-			&&  m_AuxAccent == _X.m_AuxAccent
-			&&	!strncmp(m_CommonAncode, _X.m_CommonAncode,CommonAncodeSize)
-			&&	m_PrefixSetNo == _X.m_PrefixSetNo;
+	return		m_FlexiaModelNo == comparand.m_FlexiaModelNo 
+			&&	m_AccentModelNo == comparand.m_AccentModelNo
+			&&  m_AuxAccent == comparand.m_AuxAccent
+			&&	!strncmp(m_CommonAncode, comparand.m_CommonAncode,CommonAncodeSize)
+			&&	m_PrefixSetNo == comparand.m_PrefixSetNo;
 };
 
 //----------------------------------------------------------------------------
@@ -171,24 +171,24 @@ CParadigmInfo CParadigmInfo::AnyParadigmInfo()
 }
 
 //----------------------------------------------------------------------------
-bool CParadigmInfo::IsAnyEqual( const CParadigmInfo& _X ) const
+bool CParadigmInfo::IsAnyEqual( const CParadigmInfo& value ) const
 {
 	return (
 		    (m_FlexiaModelNo==AnyParadigmNo		|| 
-		  _X.m_FlexiaModelNo==AnyParadigmNo		|| 
-		     m_FlexiaModelNo==_X.m_FlexiaModelNo)
+		  value.m_FlexiaModelNo==AnyParadigmNo		|| 
+		     m_FlexiaModelNo==value.m_FlexiaModelNo)
 		&&	(m_AccentModelNo==AnyAccentModelNo	||
-		  _X.m_AccentModelNo==AnyAccentModelNo	|| 
-		     m_AccentModelNo==_X.m_AccentModelNo)
+		  value.m_AccentModelNo==AnyAccentModelNo	|| 
+		     m_AccentModelNo==value.m_AccentModelNo)
 		&&  (m_AuxAccent==AnyAccent				||
-		  _X.m_AuxAccent==AnyAccent				|| 
-		     m_AuxAccent==_X.m_AuxAccent)
-	    && (!strncmp(m_CommonAncode,  _X.m_CommonAncode,CommonAncodeSize)
+		  value.m_AuxAccent==AnyAccent				|| 
+		     m_AuxAccent==value.m_AuxAccent)
+	    && (!strncmp(m_CommonAncode,  value.m_CommonAncode,CommonAncodeSize)
 		 || !strncmp(m_CommonAncode,	AnyCommonAncode,CommonAncodeSize)
-		 || !strncmp(_X.m_CommonAncode, AnyCommonAncode,CommonAncodeSize))
+		 || !strncmp(value.m_CommonAncode, AnyCommonAncode,CommonAncodeSize))
 		&&	(m_PrefixSetNo==AnyPrefixSetNo		||
-		  _X.m_PrefixSetNo==AnyPrefixSetNo		|| 
-		     m_PrefixSetNo==_X.m_PrefixSetNo) 
+		  value.m_PrefixSetNo==AnyPrefixSetNo		|| 
+		     m_PrefixSetNo==value.m_PrefixSetNo) 
 		   );
 }
 

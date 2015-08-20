@@ -5,34 +5,47 @@
 SYSTEMCXX=@ac_systemcxx@
 
 ifeq "$(SYSTEMCXX)" "no"
-GCC_VERSION ?= 42
-CXX=g++${GCC_VERSION}
+	GCC_VERSION ?= 42
+	CXX=g++${GCC_VERSION}
 endif
+
+LibName := $(LibBaseName)$(ct)
+objects := $(addsuffix .o$(ct),$(object_base_names))
+
+possible_objects := $(foreach ct_value,$(ct_values),$(addsuffix .o$(ct_value),$(object_base_names)))
+
+libs_argument := $(call construct_cxx_libs_flags,$(libs))
+lib_output_files := $(call construct_lib_output_files,$(LibName))
 
 ifeq ($(libmode), shared)
 
-$(LibName).$(lib_ext) : $(objects)
+$(lib_output_files) : $(libs) $(objects)
 	$(mode_error)
-	$(CXX) -$(libmode) -o $@ $^ @PCRE_LIBS@
-	cp $@ $(RML)/Bin/
+	$(CXX) -$(libmode) $(call construct_shlib_output_flags,$(LibName)) $^ $(CXX_SHOBJ_FLAGS) $(libs_argument)
+	cp $(lib_output_files) $(RML)/Bin/
 
 else
 
-$(LibName).$(lib_ext) : $(objects)
+$(lib_output_files) : $(objects)
 	$(mode_error)
 	ar rcs  $@  $^
-	cp $@ $(RML)/Bin/
+	cp $(lib_output_files) $(RML)/Bin/
 endif
 
+
+$(libs): %$(ct).$(lib_ext) : FORCE
+	$(mode_error)
+	$(MAKE) -C $(dir $@) mode=$(mode) libmode=$(libmode)
 
 $(objects): %.o$(ct) : %.cpp
 	$(mode_error)
 	$(CXX) $(cparams) $< -o $@
 
+FORCE:
 
 include $(wildcard *.d)
 
 
 clean:
-	-rm -f $(objects) $(LibName).$(lib_ext) *.d
+	-rm -f $(possible_objects) $(call construct_possible_lib_output_files,$(LibBaseName)) *.d
 

@@ -1,11 +1,11 @@
 include ../common/common_mak
-LibName = libAgramtab$(ct)
+LibBaseName = Agramtab
 
 
-objects = EngGramTab.o$(ct) \
-GerGramTab.o$(ct) \
-RusGramTab.o$(ct) \
-agramtab_.o$(ct) \
-../common/utilit.o$(ct)
+object_base_names = EngGramTab \
+	  	    GerGramTab \
+		    RusGramTab \
+		    agramtab_ \
+		    ../common/utilit
 
 include ../common/common_lib_mak

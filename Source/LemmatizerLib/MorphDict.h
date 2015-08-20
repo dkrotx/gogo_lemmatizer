@@ -16,12 +16,12 @@ struct CLemmaInfoAndLemma
 	int			m_LemmaStrNo;
 	CLemmaInfo	m_LemmaInfo;
 
-	bool operator < (const CLemmaInfoAndLemma& _X) const 
+	bool operator < (const CLemmaInfoAndLemma& comparand) const 
 	{
-		if (m_LemmaInfo.m_FlexiaModelNo != _X.m_LemmaInfo.m_FlexiaModelNo)
-			return m_LemmaInfo.m_FlexiaModelNo < _X.m_LemmaInfo.m_FlexiaModelNo;
+		if (m_LemmaInfo.m_FlexiaModelNo != comparand.m_LemmaInfo.m_FlexiaModelNo)
+			return m_LemmaInfo.m_FlexiaModelNo < comparand.m_LemmaInfo.m_FlexiaModelNo;
 
-		return m_LemmaStrNo < _X.m_LemmaStrNo;
+		return m_LemmaStrNo < comparand.m_LemmaStrNo;
 	};
 
 };
@@ -46,11 +46,11 @@ protected:
 
 		IsLessMorphInterp(const CShortStringHolder& SearchInfos) : m_SearchInfos(SearchInfos) {};
 
-		bool	operator () (const CLemmaInfoAndLemma& _X1, const char* _X2) const
+		bool	operator () (const CLemmaInfoAndLemma& comparand1, const char* comparand2) const
 		{
-			const char* base = m_SearchInfos[_X1.m_LemmaStrNo].GetString();
+			const char* base = m_SearchInfos[comparand1.m_LemmaStrNo].GetString();
 
-			return strcmp(base, _X2) < 0;
+			return strcmp(base, comparand2) < 0;
 		};
 
 	};
